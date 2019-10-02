@@ -113,7 +113,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $response->messages->attachment->payload->setText("Cosa vuoi sapere del film?");
     $button = new ChatFuelButton();
     $button->title = "Plot";
-    $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/plot";
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot';
     $response->messages->attachment->payload->addButton($button);
     return json_encode($response);
 });

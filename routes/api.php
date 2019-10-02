@@ -96,7 +96,7 @@ Route::get('/movies/search', function(Request $request) {
     $movies = $resp_obj->results;
 
     $response = new ChatFuelButtonResponse();
-    $response->messages[0]->attachment->payload->setText("Quale film intendi di preciso?");
+    $response->messages[0]->attachment->payload->setText("Which one?");
     $i = 0;
     foreach ($movies as $movie) {
         $i++;
@@ -117,7 +117,7 @@ Route::get('/movies/search', function(Request $request) {
 Route::get('movies/{id}/select', function(Request $request) {
     $response = new ChatFuelButtonResponse();
     $id = $request->id;
-    $response->messages[0]->attachment->payload->setText("Cosa vuoi sapere del film?");
+    $response->messages[0]->attachment->payload->setText("What do you want to know?");
     $button = new ChatFuelButton();
     $button->title = "Plot";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot';

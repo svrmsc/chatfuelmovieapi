@@ -96,6 +96,7 @@ Route::get('/movies/search', function(Request $request) {
     $movies = $resp_obj->results;
 
     $response = new ChatFuelButtonResponse();
+    $response->messages->attachment->payload->setText("Quale film intendi di preciso?");
     foreach ($movies as $movie) {
         $button = new ChatFuelButton();
         $button->title = $movie->title;

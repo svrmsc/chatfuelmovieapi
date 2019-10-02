@@ -134,7 +134,7 @@ Route::get('/movies/{id}/plot', function(Request $request) {
     $messages[] = $message;
     $messages[] = $plot;
 
-    $response = new ChatFuelTextResponse($plot);
+    $response = new ChatFuelTextResponse($messages);
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);

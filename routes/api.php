@@ -59,10 +59,10 @@ class ChatFuelMessages  {
 
 
 class ChatFuelButtonResponse  {
-    public $messages;
+    public $messages = array();
     public function __construct()
     {
-        $this->messages = new ChatFuelMessages();
+        $this->messages[] = new ChatFuelMessages();
     }
 }
 

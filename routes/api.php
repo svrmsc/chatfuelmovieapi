@@ -33,6 +33,10 @@ class ChatFuelPayload  {
     public function addButton(ChatFuelButton $button) {
         $this->buttons[] = $button;
     }
+
+    public function setText($text) {
+        $this->text = $text;
+    }
 }
 
 class ChatFuelAttachment  {
@@ -52,12 +56,31 @@ class ChatFuelMessages  {
     }
 }
 
-class ChatFuelResponse  {
+
+
+class ChatFuelButtonResponse  {
     public $messages;
     public function __construct()
     {
-        //$this->attributes['messages'] = new ChatFuelMessages();
         $this->messages = new ChatFuelMessages();
+    }
+}
+
+class ChatFuelText {
+    public $text;
+    public function __construct($text)
+    {
+        $this->text = $text;
+    }
+}
+
+class ChatFuelTextResponse {
+    public $messages = array();
+    public function __construct($messages)
+    {
+        foreach ($messages as $message) {
+            $this->messages[] = new ChatFuelText($message);
+        }
     }
 }
 
@@ -72,17 +95,40 @@ Route::get('/movies/search', function(Request $request) {
     $resp_obj = json_decode($res->body);
     $movies = $resp_obj->results;
 
-    $response = new ChatFuelResponse();
-
-    //dd($movies);
-
+    $response = new ChatFuelButtonResponse();
     foreach ($movies as $movie) {
-        //dd($movie->title);
         $button = new ChatFuelButton();
         $button->title = $movie->title;
         $id = $movie->id;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select";
         $response->messages->attachment->payload->addButton($button);
     }
 
+    return json_encode($response);
+});
+
+Route::get('movies/{id}/select', function(Request $request) {
+    $response = new ChatFuelButtonResponse();
+    $id = $request->id;
+    $response->messages->attachment->payload->setText("Cosa vuoi sapere del film?");
+    $button = new ChatFuelButton();
+    $button->title = "Plot";
+    $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/plot";
+    $response->messages->attachment->payload->addButton($button);
+    return json_encode($response);
+});
+
+Route::get('/movies/{id}/plot', function(Request $request) {
+    $headers = array('Accept' => 'application/json');
+    $id = $request->id;
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $resp_obj = json_decode($res->body);
+    $plot = $resp_obj->overview;
+    $message = "Secondo The Movie DB, la trama è questa:";
+    $messages = array();
+    $messages[] = $message;
+    $messages[] = $plot;
+
+    $response = new ChatFuelTextResponse($plot);
     return json_encode($response);
 });

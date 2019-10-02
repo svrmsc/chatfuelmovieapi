@@ -133,7 +133,7 @@ Route::get('/movies/{id}/plot', function(Request $request) {
     $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
     $resp_obj = json_decode($res->body);
     $plot = $resp_obj->overview;
-    $message = "Secondo The Movie DB, la trama è questa:";
+    $message = "From themoviedb:";
     $messages = array();
     $messages[] = $message;
     $messages[] = $plot;

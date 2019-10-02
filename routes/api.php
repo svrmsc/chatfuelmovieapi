@@ -104,8 +104,10 @@ Route::get('/movies/search', function(Request $request) {
         $response->messages->attachment->payload->addButton($button);
     }
 
-    $response = json_decode($response);
-    return json_encode($response);
+
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
 });
 
 Route::get('movies/{id}/select', function(Request $request) {
@@ -116,8 +118,9 @@ Route::get('movies/{id}/select', function(Request $request) {
     $button->title = "Plot";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot';
     $response->messages->attachment->payload->addButton($button);
-    $response = json_decode($response);
-    return json_encode($response);
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
 });
 
 Route::get('/movies/{id}/plot', function(Request $request) {
@@ -132,6 +135,8 @@ Route::get('/movies/{id}/plot', function(Request $request) {
     $messages[] = $plot;
 
     $response = new ChatFuelTextResponse($plot);
-    $response = json_decode($response);
-    return json_encode($response);
+
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
 });

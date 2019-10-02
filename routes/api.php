@@ -97,12 +97,15 @@ Route::get('/movies/search', function(Request $request) {
 
     $response = new ChatFuelButtonResponse();
     $response->messages[0]->attachment->payload->setText("Quale film intendi di preciso?");
+    $i = 0;
     foreach ($movies as $movie) {
+        $i++;
         $button = new ChatFuelButton();
         $button->title = $movie->title;
         $id = $movie->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select";
         $response->messages[0]->attachment->payload->addButton($button);
+        if ($i == 3) break;
     }
 
 

@@ -76,7 +76,7 @@ class ChatFuelText {
 
 class ChatFuelTextResponse {
     public $messages = array();
-    public function __construct($messages)
+    public function __construct(array $messages)
     {
         foreach ($messages as $message) {
             $this->messages[] = new ChatFuelText($message);

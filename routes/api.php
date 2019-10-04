@@ -130,8 +130,8 @@ Route::get('movies/{id}/select', function(Request $request) {
     $resp_obj = json_decode($res->body);
     $vote_average = $resp_obj->vote_average;
     $tagline = $resp_obj->tagline;
-    $genres[] = $resp_obj->genres;
-    $genre = $genres[0]->name;
+    $genre = $resp_obj->genres[0]->name;
+
 
     $response->messages[0]->attachment->payload->setText($tagline ." This film is a " . $genre . "and its average rating is" . $vote_average . "/10. " . "What do you want to know?");
 

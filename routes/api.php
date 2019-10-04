@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 class ChatFuelButton  {
     public $title;
     public $url;
@@ -90,6 +91,10 @@ Route::get('/movies/search', function(Request $request) {
         $query = $request->q;
     }
 
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
     $headers = array('Accept' => 'application/json');
     $res = Requests::get('https://api.themoviedb.org/3/search/movie?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US&query=' . $query, $headers);
     $resp_obj = json_decode($res->body);
@@ -101,9 +106,9 @@ Route::get('/movies/search', function(Request $request) {
     foreach ($movies as $movie) {
         $i++;
         $button = new ChatFuelButton();
-        $button->title = $movie->title;
+        $button->title = $movie->title . " " . $movie->release_date;
         $id = $movie->id;
-        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select";
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood;
         $response->messages[0]->attachment->payload->addButton($button);
         if ($i == 3) break;
     }
@@ -115,12 +120,34 @@ Route::get('/movies/search', function(Request $request) {
 });
 
 Route::get('movies/{id}/select', function(Request $request) {
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+    $headers = array('Accept' => 'application/json');
     $response = new ChatFuelButtonResponse();
     $id = $request->id;
-    $response->messages[0]->attachment->payload->setText("What do you want to know?");
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $resp_obj = json_decode($res->body);
+    $vote_average = $resp_obj->vote_average;
+    $tagline = $resp_obj->tagline;
+    $genres[] = $resp_obj->genres;
+    $genre = $genres[0]->name;
+
+    $response->messages[0]->attachment->payload->setText($tagline ." This film is a " . $genre . "and its average rating is" . $vote_average . "/10. " . "What do you want to know?");
+
     $button = new ChatFuelButton();
     $button->title = "Plot";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot';
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot?s=' . $mood;
+    $response->messages[0]->attachment->payload->addButton($button);
+
+    $button = new ChatFuelButton();
+    $button->title = "Actors";
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot?s=' . $mood;
+    $response->messages[0]->attachment->payload->addButton($button);
+
+    $button = new ChatFuelButton();
+    $button->title = "Director";
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot?s=' . $mood;
     $response->messages[0]->attachment->payload->addButton($button);
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);
@@ -128,6 +155,9 @@ Route::get('movies/{id}/select', function(Request $request) {
 });
 
 Route::get('/movies/{id}/plot', function(Request $request) {
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
     $headers = array('Accept' => 'application/json');
     $id = $request->id;
     $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);

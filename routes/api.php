@@ -154,7 +154,9 @@ Route::get('movies/{id}/select', function(Request $request) {
     $genre = $resp_obj->genres[0]->name;
 
 
-    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " is a " . $year[0] . " " . $genre . " film and its average rating is: " . $vote_average . "/10. " . "What do you want to know?");
+   // $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " is a " . $year[0] . " " . $genre . " film and its average rating is: " . $vote_average . "/10. " . "What do you want to know?");
+
+    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " is a " . $year[0] . " " . $genre . " film and its average rating is: " . $vote_average );
 
     $button = new ChatFuelButton();
     $button->title = "Plot";

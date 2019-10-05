@@ -150,7 +150,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $title_film = $resp_obj->original_title;
     $tagline = $resp_obj->tagline;
     $release_date = $resp_obj->release_date;
-    $year = split("-", $release_date);
+    $year = explode("-", $release_date);
     $genre = $resp_obj->genres[0]->name;
 
 

@@ -149,11 +149,12 @@ Route::get('movies/{id}/select', function(Request $request) {
     $vote_average = $resp_obj->vote_average;
     $title_film = $resp_obj->original_title;
     $tagline = $resp_obj->tagline;
-    $release_date = split("-",$resp_obj->release_date);
+    $release_date = $resp_obj->release_date;
+    $year = split("-", $release_date);
     $genre = $resp_obj->genres[0]->name;
 
 
-    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " is a " . $release_date[0] . " " . $genre . " film and its average rating is: " . $vote_average . "/10. " . "What do you want to know?");
+    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " is a " . $year[0] . " " . $genre . " film and its average rating is: " . $vote_average . "/10. " . "What do you want to know?");
 
     $button = new ChatFuelButton();
     $button->title = "Plot";

@@ -105,7 +105,6 @@ Route::get('/movies/search', function(Request $request) {
 
     $user_name_array[] = explode(" ", $user_name);
 
-    $user_name_array->leng;
 
     $userN='';
     $i=0;
@@ -159,8 +158,6 @@ Route::get('movies/{id}/select', function(Request $request) {
     }
 
     $user_name_array[] = explode(" ", $user_name);
-
-    $user_name_array->leng;
 
     $userN='';
     $i=0;

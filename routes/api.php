@@ -109,7 +109,7 @@ Route::get('/movies/search', function(Request $request) {
     $userN='';
     $i=0;
     foreach($user_name_array as $user){
-        if(i==0){
+        if($i==0){
             $userN = $user;
             $i++;
         }

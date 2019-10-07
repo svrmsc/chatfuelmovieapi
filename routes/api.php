@@ -229,10 +229,10 @@ Route::get('/movies/{id}/actors', function(Request $request){
 
     $headers = array('Accept' => 'application/json');
     $id = $request->id;
-    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . 'credits' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/credits' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
     $resp_obj = json_decode($res->body);
 
-    $cast = $resp_obj->cast[];
+    $cast = $resp_obj->cast;
     $i=0;
     $messages = array();
     for($i;$i<4;$i++){

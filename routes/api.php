@@ -124,6 +124,13 @@ Route::get('/movies/search', function(Request $request) {
         if ($i == 3) break;
     }
 
+    if($i==0){
+        $messages = array();
+        $message='I\'m sorry I didn\'t find what you were looking for ...';
+        $messages[] = $message;
+        $response = new ChatFuelTextResponse($messages);
+    }
+
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);

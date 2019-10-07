@@ -173,7 +173,7 @@ Route::get('movies/{id}/select', function(Request $request) {
 
     $button = new ChatFuelButton();
     $button->title = "Director";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/director?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);
 
     $response = json_encode($response);
@@ -237,6 +237,45 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $messages = array();
     for($i;$i<4;$i++){
         $messages[$i] = $cast[$i]->name . " is " . $cast[$i]->character;
+    }
+
+    $response = new ChatFuelTextResponse($messages);
+
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+
+
+});
+
+Route::get('/movies/{id}/director', function(Request $request){
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
+    if ($request->has('idu')) {
+        $id_utente = $request->idu;
+    }
+
+    if ($request->has('uname')) {
+        $user_name = $request->uname;
+    }
+    $user_name = str_replace(" ", "+", $user_name);
+
+    $headers = array('Accept' => 'application/json');
+    $id = $request->id;
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/credits' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $resp_obj = json_decode($res->body);
+
+    $crew = $resp_obj->crew;
+    $i=0;
+    $messages = array();
+
+    foreach($crew as $director){
+        if($director->job == 'Director'){
+            $messages[$i]=$director->name;
+            $i++;
+        }
     }
 
     $response = new ChatFuelTextResponse($messages);

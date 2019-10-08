@@ -287,7 +287,7 @@ Route::get('/movies/{id}/director', function(Request $request){
         }
     }
 
-    if($i=1){
+    if($i==1){
         messages[0]='The director is:';
     }
     else{

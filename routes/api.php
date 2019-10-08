@@ -242,9 +242,11 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $cast = $resp_obj->cast;
     $i=0;
     $messages = array();
+    $messages[0]='The main actors are...';
     for($i;$i<4;$i++){
-        $messages[$i] = $cast[$i]->name . " is " . $cast[$i]->character;
+        $messages[$i+1] = $cast[$i]->name . " is " . $cast[$i]->character;
     }
+
 
     $response = new ChatFuelTextResponse($messages);
 
@@ -280,9 +282,16 @@ Route::get('/movies/{id}/director', function(Request $request){
 
     foreach($crew as $director){
         if($director->job == 'Director'){
-            $messages[$i]=$director->name;
+            $messages[$i+1]=$director->name;
             $i++;
         }
+    }
+
+    if($i=1){
+        messages[0]='The director is:';
+    }
+    else{
+        messages[0]='The dorectprs are';
     }
 
     $response = new ChatFuelTextResponse($messages);

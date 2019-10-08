@@ -291,7 +291,7 @@ Route::get('/movies/{id}/director', function(Request $request){
         messages[0]='The director is:';
     }
     else{
-        messages[0]='The dorectprs are';
+        messages[0]='The dorectors are:';
     }
 
     $response = new ChatFuelTextResponse($messages);

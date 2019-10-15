@@ -303,10 +303,10 @@ Route::get('/movies/{id}/director', function(Request $request){
     }
 
     if($i==1){
-        messages[0]='The director is:';
+        $messages[0]='The director is:';
     }
     else{
-        messages[0]='The dorectors are:';
+        $messages[0]='The directors are:';
     }
 
     $response = new ChatFuelTextResponse($messages);

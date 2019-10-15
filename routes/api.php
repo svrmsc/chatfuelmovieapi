@@ -85,6 +85,21 @@ class ChatFuelTextResponse {
     }
 }
 
+class ChatFuelQuickReplies {
+    public $quick_replies = array();
+
+    public function addButton(ChatFuelButton $button) {
+        $this->quick_replies[] = $button;
+    }
+}
+
+class ChatFuelQuickReplyResponse {
+    public $messages = array();
+    public function __construct() {
+        $this->messages[] = new ChatFuelQuickReplies();
+    }
+}
+
 Route::get('/movies/search', function(Request $request) {
     $query = null;
     if ($request->has('q')) {

@@ -100,6 +100,16 @@ class ChatFuelQuickReplyResponse {
     }
 }
 
+Route::get('/provaqr', function () {
+    $response = new ChatFuelQuickReplyResponse();
+    $button = new ChatFuelButton();
+    $button->title = "prova";
+    $response->messages[0].addButton($button);
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+});
+
 Route::get('/movies/search', function(Request $request) {
     $query = null;
     if ($request->has('q')) {

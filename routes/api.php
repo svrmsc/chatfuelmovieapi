@@ -335,7 +335,7 @@ Route::get('/movies/{id}/videos', function(Request $request){
 
     $resp_obj = json_decode($res->body);
 
-    $key_video = $resp_obj->key;
+    $key_video = $resp_obj->results[0]->key;
 
     $messages = array();
     $messages[] = 'Ecco il trailer: '.'https://www.youtube.com/watch?v='.$key_video;

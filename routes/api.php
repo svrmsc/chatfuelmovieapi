@@ -132,12 +132,12 @@ Route::get('/movies/search', function(Request $request) {
 
 
     $headers = array('Accept' => 'application/json');
-    $res = Requests::get('https://api.themoviedb.org/3/search/movie?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US&query=' . $query, $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/search/movie?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it&query=' . $query, $headers);
     $resp_obj = json_decode($res->body);
     $movies = $resp_obj->results;
 
     $response = new ChatFuelButtonResponse();
-    $response->messages[0]->attachment->payload->setText("Which one?");
+    $response->messages[0]->attachment->payload->setText("Quale di questi?");
     $i = 0;
     foreach ($movies as $movie) {
         $i++;
@@ -151,7 +151,7 @@ Route::get('/movies/search', function(Request $request) {
 
     if($i==0){
         $messages = array();
-        $message='I\'m sorry I didn\'t find what you were looking for ...';
+        $message='Scusami non ho trovato risultati...';
         $messages[] = $message;
         $response = new ChatFuelTextResponse($messages);
     }
@@ -181,7 +181,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $headers = array('Accept' => 'application/json');
     $response = new ChatFuelButtonResponse();
     $id = $request->id;
-    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
     $vote_average = $resp_obj->vote_average;
     $title_film = $resp_obj->original_title;
@@ -191,21 +191,21 @@ Route::get('movies/{id}/select', function(Request $request) {
     $genre = $resp_obj->genres[0]->name;
 
 
-    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " is a " . $year[0] . " " . $genre . " film and its average rating is: " . $vote_average . "/10. " . "What do you want to know?");
+    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " è un " . $genre . " del " . $year[0]  . " e il suo voto medio è: " . $vote_average . "/10. " . "Cosa vuoi sapere?");
 
     $button = new ChatFuelButton();
-    $button->title = "Plot";
+    $button->title = "Trama";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);
 
     $button = new ChatFuelButton();
-    $button->title = "Actors";
+    $button->title = "Attori";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/actors?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);
 
     $button = new ChatFuelButton();
-    $button->title = "Director";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/director?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
+    $button->title = "Regista";
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/videos?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);
 
     $response = json_encode($response);
@@ -230,10 +230,10 @@ Route::get('/movies/{id}/plot', function(Request $request) {
 
     $headers = array('Accept' => 'application/json');
     $id = $request->id;
-    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
     $plot = $resp_obj->overview;
-    $message = "From themoviedb:";
+    $message = "Da themoviedb:";
     $messages = array();
     $messages[] = $message;
     $messages[] = $plot;
@@ -261,17 +261,16 @@ Route::get('/movies/{id}/actors', function(Request $request){
 
     $headers = array('Accept' => 'application/json');
     $id = $request->id;
-    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/credits' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/credits' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
 
     $cast = $resp_obj->cast;
     $i=0;
     $messages = array();
-    $messages[0]='The main actors are...';
+    $messages[0]='Gli attori principali sono:';
     for($i;$i<4;$i++){
-        $messages[$i+1] = $cast[$i]->name . " is " . $cast[$i]->character;
+        $messages[$i+1] = $cast[$i]->name . " è " . $cast[$i]->character;
     }
-
 
     $response = new ChatFuelTextResponse($messages);
 
@@ -298,7 +297,7 @@ Route::get('/movies/{id}/director', function(Request $request){
 
     $headers = array('Accept' => 'application/json');
     $id = $request->id;
-    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/credits' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/credits' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
 
     $crew = $resp_obj->crew;
@@ -307,17 +306,12 @@ Route::get('/movies/{id}/director', function(Request $request){
 
     foreach($crew as $director){
         if($director->job == 'Director'){
-            $messages[$i+1]=$director->name;
+            $messages[$i]=$director->name;
             $i++;
         }
     }
 
-    if($i==1){
-        $messages[0]='The director is:';
-    }
-    else{
-        $messages[0]='The directors are:';
-    }
+
 
     $response = new ChatFuelTextResponse($messages);
 
@@ -327,3 +321,38 @@ Route::get('/movies/{id}/director', function(Request $request){
 
 
 });
+
+Route::get('/movies/{id}/videos', function(Request $request){
+
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
+    if ($request->has('idu')) {
+        $id_utente = $request->idu;
+    }
+
+    if ($request->has('uname')) {
+        $user_name = $request->uname;
+    }
+
+    $user_name = str_replace(" ", "+", $user_name);
+
+    $headers = array('Accept' => 'application/json');
+    $id = $request->id;
+
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/videos' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+
+    $resp_obj = json_decode($res->body);
+
+    $key_video = $resp_obj->results[0]->key;
+
+    $messages = array();
+    $messages[] = 'Ecco il trailer: '.'https://www.youtube.com/watch?v='.$key_video;
+
+    $response = new ChatFuelTextResponse($messages);
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+});
+

@@ -131,7 +131,7 @@ Route::get('/movies/search', function(Request $request) {
     $i = 0;
     foreach ($movies as $movie) {
         $i++;
-        $button = new ChatFuelQuickReply();
+        $button = new ChatFuelButton();
         $button->title = $movie->title ;
         $id = $movie->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
@@ -183,17 +183,17 @@ Route::get('movies/{id}/select', function(Request $request) {
 
     $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " è un film " . $genre . " del " . $year[0]  . " e il suo voto medio è: " . $vote_average . "/10. " . "Cosa vuoi sapere?");
 
-    $button = new ChatFuelQuckReply();
+    $button = new ChatFuelButton();
     $button->title = "Trama";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/plot?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);
 
-    $button = new ChatFuelQuickReply();
+    $button = new ChatFuelButton();
     $button->title = "Attori";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/actors?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);
 
-    $button = new ChatFuelQuickeply();
+    $button = new ChatFuelButton();
     $button->title = "Regista";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/director?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);

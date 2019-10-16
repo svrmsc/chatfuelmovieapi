@@ -311,3 +311,38 @@ Route::get('/movies/{id}/director', function(Request $request){
 
 
 });
+
+Route::get('/movie/{id}/videos', function(Request $request){
+
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
+    if ($request->has('idu')) {
+        $id_utente = $request->idu;
+    }
+
+    if ($request->has('uname')) {
+        $user_name = $request->uname;
+    }
+
+    $user_name = str_replace(" ", "+", $user_name);
+
+    $headers = array('Accept' => 'application/json');
+    $id = $request->id;
+
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/videos' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+
+    $resp_obj = json_decode($res->body);
+
+    $key_video = $resp_obj->key_video;
+
+    $messages = array();
+    $messages[] = 'Ecco il trailer: '.'https://www.youtube.com/watch?v='.$key_video;
+
+    $response = new ChatFuelTextResponse($messages);
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+});
+

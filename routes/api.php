@@ -312,7 +312,7 @@ Route::get('/movies/{id}/director', function(Request $request){
 
 });
 
-Route::get('/movie/{id}/videos', function(Request $request){
+Route::get('/movies/{id}/videos', function(Request $request){
 
     if ($request->has('s')) {
         $mood = $request->s;

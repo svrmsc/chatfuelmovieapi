@@ -195,7 +195,7 @@ Route::get('movies/{id}/select', function(Request $request) {
 
     $button = new ChatFuelButton();
     $button->title = "Regista";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/director?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . '/videos?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name ;
     $response->messages[0]->attachment->payload->addButton($button);
 
     $response = json_encode($response);
@@ -335,7 +335,7 @@ Route::get('/movie/{id}/videos', function(Request $request){
 
     $resp_obj = json_decode($res->body);
 
-    $key_video = $resp_obj->key_video;
+    $key_video = $resp_obj->key;
 
     $messages = array();
     $messages[] = 'Ecco il trailer: '.'https://www.youtube.com/watch?v='.$key_video;

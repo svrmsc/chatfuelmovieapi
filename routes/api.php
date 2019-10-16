@@ -96,7 +96,7 @@ class ChatFuelQuickReplies {
 class ChatFuelQuickReplyResponse {
     public $messages = array();
     public function __construct() {
-        $this->messages[] = new ChatFuelMessages();
+        $this->messages[] = new ChatFuelQuickReplies();
     }
 }
 
@@ -126,7 +126,7 @@ Route::get('/movies/search', function(Request $request) {
     $resp_obj = json_decode($res->body);
     $movies = $resp_obj->results;
 
-    $response = new ChatFuelQuickReplyResponse();
+    $response = new ChatFuelButtonResponse();
     $response->messages[0]->attachment->payload->setText("Quale di questi?");
     $i = 0;
     foreach ($movies as $movie) {
@@ -136,7 +136,7 @@ Route::get('/movies/search', function(Request $request) {
         $id = $movie->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
         $response->messages[0]->attachment->payload->addButton($button);
-        if ($i == 11) break;
+        if ($i == 3) break;
     }
 
     if($i==0){
@@ -169,7 +169,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $user_name = str_replace(" ", "+", $user_name);
 
     $headers = array('Accept' => 'application/json');
-    $response = new ChatFuelQuickreplyResponse();
+    $response = new ChatFuelButtonResponse();
     $id = $request->id;
     $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
@@ -181,7 +181,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $genre = $resp_obj->genres[0]->name;
 
 
-    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " è un film " . $genre . " del " . $year[0]  . " e il suo voto medio è: " . $vote_average . "/10. " . "Cosa vuoi sapere?");
+    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " è un " . $genre . " del " . $year[0]  . " e il suo voto medio è: " . $vote_average . "/10. " . "Cosa vuoi sapere?");
 
     $button = new ChatFuelButton();
     $button->title = "Trama";
@@ -257,7 +257,7 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $cast = $resp_obj->cast;
     $i=0;
     $messages = array();
-    $messages[0]='Gli attori principali sono: ';
+    $messages[0]='Gli attori principali sono:';
     for($i;$i<4;$i++){
         $messages[$i+1] = $cast[$i]->name . " è " . $cast[$i]->character;
     }

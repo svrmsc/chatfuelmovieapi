@@ -40,6 +40,20 @@ class ChatFuelPayload  {
     }
 }
 
+class ChatFuelPayload1  {
+    public $template_type = "button";
+    public $text = "hello!";
+    public $buttons = array();
+
+    public function addButton(ChatFuelButton $button) {
+        $this->quick_replies[] = $button;
+    }
+
+    public function setText($text) {
+        $this->text = $text;
+    }
+}
+
 class ChatFuelAttachment  {
     public $type = "template";
     public $payload;
@@ -49,11 +63,28 @@ class ChatFuelAttachment  {
 
 }
 
+class ChatFuelAttachment1  {
+    public $type = "template";
+    public $payload;
+    public function __construct() {
+        $this->payload = new ChatFuelPayload1();
+    }
+
+}
+
 class ChatFuelMessages  {
     public $attachment = array();
     public function __construct()
     {
         $this->attachment = new ChatFuelAttachment();
+    }
+}
+
+class ChatFuelMessages1  {
+    public $attachment = array();
+    public function __construct()
+    {
+        $this->attachment = new ChatFuelAttachment1();
     }
 }
 
@@ -96,7 +127,7 @@ class ChatFuelQuickReplies {
 class ChatFuelQuickReplyResponse {
     public $messages = array();
     public function __construct() {
-        $this->messages[] = new ChatFuelQuickReplies();
+        $this->messages[] = new ChatFuelMessages1();
     }
 }
 
@@ -137,7 +168,7 @@ Route::get('/actors/search', function(Request $request) {
     $actors = $resp_obj->results;
 
     $response = new ChatFuelQuickReplyResponse();
-    $response->messages[0]->setText("Quale di questi?");
+    $response->messages[0]->attachment->payload->setText("Quale di questi?");
     $i = 0;
     foreach ($actors as $actor) {
         $i++;
@@ -145,7 +176,7 @@ Route::get('/actors/search', function(Request $request) {
         $button->title = $actor->name;
         $id = $actor->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/actor/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
-        $response->messages[0]->addButton($button);
+        $response->messages[0]->attachment->payload->addButton($button);
         if ($i ==11) break;
     }
 

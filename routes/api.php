@@ -110,6 +110,59 @@ Route::get('/provaqr', function () {
     return $response;
 });
 
+Route::get('/actors/search', function(Request $request) {
+    $query = null;
+    if ($request->has('q')) {
+        $query = $request->q;
+    }
+
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
+    if ($request->has('idu')) {
+        $id_utente = $request->idu;
+    }
+
+    if ($request->has('uname')) {
+        $user_name = $request->uname;
+    }
+
+    $user_name = str_replace(" ", "+", $user_name);
+
+
+    $headers = array('Accept' => 'application/json');
+    $res = Requests::get('https://api.themoviedb.org/3/search/person?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it&query=' . $query, $headers);
+    $resp_obj = json_decode($res->body);
+    $actors = $resp_obj->results;
+
+    $response = new ChatFuelQuickReplyResponse();
+    $response->messages[0]->attachment->payload->setText("Quale di questi?");
+    $i = 0;
+    foreach ($actors as $actor) {
+        $i++;
+        $button = new ChatFuelButton();
+        $button->title = $actor->name;
+        $id = $actor->id;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/actor/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->attachment->payload->addButton($button);
+        if ($i ==11) break;
+    }
+
+    if($i==0){
+        $messages = array();
+        $message='Scusami non ho trovato risultati...';
+        $messages[] = $message;
+        $response = new ChatFuelTextResponse($messages);
+    }
+
+
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+
+});
+
 Route::get('/movies/search', function(Request $request) {
     $query = null;
     if ($request->has('q')) {
@@ -355,4 +408,6 @@ Route::get('/movies/{id}/videos', function(Request $request){
     $response = str_replace("\/", "/", $response);
     return $response;
 });
+
+
 

@@ -106,7 +106,7 @@ class ChatFuelQuickReplies {
 class ChatFuelQuickReplyResponse {
     public $messages = array();
     public function __construct() {
-        $this->messages[] = new ChatFuelMessages1();
+        $this->messages[] = new ChatFuelQuickReplies();
     }
 }
 

@@ -288,7 +288,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $res = Requests::get('https://api.themoviedb.org/3/movies/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
     $vote_average = $resp_obj->vote_average;
-    $title_film = $resp_obj->original_title;
+    $title_film = $resp_obj->title;
     $tagline = $resp_obj->tagline;
     $release_date = $resp_obj->release_date;
     $year = explode("-", $release_date);

@@ -278,6 +278,145 @@ Route::get('/movies/search', function(Request $request) {
     return $response;
 });
 
+Route::get('discover/genre', function(Request $request){
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
+    if ($request->has('idu')) {
+        $id_utente = $request->idu;
+    }
+
+    if ($request->has('uname')) {
+        $user_name = $request->uname;
+    }
+
+    $user_name = str_replace(" ", "+", $user_name);
+
+    $headers = array('Accept' => 'application/json');
+    $response = new ChatFuelQuickReplyResponse();
+    $response->messages[0]->setText("Che genere di film vuoi vedere? Scegli tra i seguenti...");
+
+
+        $button = new ChatFuelButton();
+        $button->title = 'Commedia';
+        $id = 35;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Azione';
+        $id = 28;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Thriller';
+        $id = 53;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Animazione';
+        $id = 16;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Horror';
+        $id = 27;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Avventura';
+        $id = 12;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Drammatico';
+        $id = 18;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Fantasy';
+        $id = 14;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Documentario';
+        $id = 99;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Fantascienza';
+        $id = 878;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+        $button = new ChatFuelButton();
+        $button->title = 'Musica';
+        $id = 10402;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/discover/" . $id . "/?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+
+
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+
+
+});
+
+Route::get('discover/{id}', function(Request $request){
+
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
+    if ($request->has('idu')) {
+        $id_utente = $request->idu;
+    }
+
+    if ($request->has('uname')) {
+        $user_name = $request->uname;
+    }
+    $user_name = str_replace(" ", "+", $user_name);
+
+    $headers = array('Accept' => 'application/json');
+    $id = $request->id;
+
+    $res = Requests::get('https://api.themoviedb.org/3/discover/movie?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=' . $id , $headers);
+
+    $resp_obj = json_decode($res->body);
+    $results = $resp_obj->results;
+    $i=0;
+
+
+    $response = new ChatFuelQuickReplyResponse();
+    $response->messages[0]->setText("Vediamo se può interessarti uno di questi...");
+
+    foreach($results as $movie){
+        $i++;
+        $button = new ChatFuelButton();
+        $button->title = $movie->title;
+        $id = $movie->id;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+        if ($i ==11) break;
+    }
+
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+
+});
+
+
 Route::get('actor/{id}/movies', function(Request $request){
     if ($request->has('s')) {
         $mood = $request->s;

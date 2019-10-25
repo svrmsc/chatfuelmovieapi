@@ -190,7 +190,6 @@ Route::get('/movies/search', function(Request $request) {
     $movies = $resp_obj->results;
 
     $response = new ChatFuelButtonResponse();
-    $response->messages[0]->attachment->payload->setText("Quale di questi?");
     $i = 0;
     foreach ($movies as $movie) {
         $i++;

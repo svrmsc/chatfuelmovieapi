@@ -287,7 +287,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $id = $request->id;
     $res = Requests::get('https://api.themoviedb.org/3/movies/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
-    $vote_average = $resp_obj->vote_average;
+   // $vote_average = $resp_obj->vote_average;
     $title_film = $resp_obj->title;
     $tagline = $resp_obj->tagline;
     $release_date = $resp_obj->release_date;
@@ -295,7 +295,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $genre = $resp_obj->genres[0]->name;
 
 
-    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " è un " . $genre . " del " . $year[0]  . " e il suo voto medio è: " . $vote_average . "/10. " . "Cosa vuoi sapere?");
+    $response->messages[0]->attachment->payload->setText($tagline . " ". $title_film . " è un " . $genre . " del " . $year[0]  . " e il suo voto medio è: " . "/10. " . "Cosa vuoi sapere?");
 
     $button = new ChatFuelButton();
     $button->title = "Trama";

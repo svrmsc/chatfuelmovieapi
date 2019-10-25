@@ -154,7 +154,7 @@ Route::get('/actors/search', function(Request $request) {
         $button = new ChatFuelButton();
         $button->title = $actor->name;
         $id = $actor->id;
-        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/actor/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/actor/" . $id . "/movies?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
         $response->messages[0]->addButton($button);
         if ($i ==11) break;
     }

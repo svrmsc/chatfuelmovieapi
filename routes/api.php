@@ -225,6 +225,47 @@ Route::get('/movies/search', function(Request $request) {
     return $response;
 });
 
+Route::get('actor/{id}/movies', function(Request $request){
+    if ($request->has('s')) {
+        $mood = $request->s;
+    }
+
+    if ($request->has('idu')) {
+        $id_utente = $request->idu;
+    }
+
+    if ($request->has('uname')) {
+        $user_name = $request->uname;
+    }
+
+    $user_name = str_replace(" ", "+", $user_name);
+
+    $headers = array('Accept' => 'application/json');
+    $id = $request->id;
+    $res = Requests::get('https://api.themoviedb.org/3/person/' . $id . '/movie_credits?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
+    $resp_obj = json_decode($res->body);
+    $cast = $resp_obj->cast;
+    $i=0;
+
+
+    $response = new ChatFuelQuickReplyResponse();
+    $response->messages[0]->setText("Lo trovi nei seguenti film...");
+
+    foreach($cast as $actor){
+        $i++;
+        $button = new ChatFuelButton();
+        $button->title = $actor->title;
+        $id = $actor->id;
+        $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+        $response->messages[0]->addButton($button);
+        if ($i ==11) break;
+    }
+
+    $response = json_encode($response);
+    $response = str_replace("\/", "/", $response);
+    return $response;
+});
+
 Route::get('movies/{id}/select', function(Request $request) {
     if ($request->has('s')) {
         $mood = $request->s;
@@ -244,7 +285,7 @@ Route::get('movies/{id}/select', function(Request $request) {
     $headers = array('Accept' => 'application/json');
     $response = new ChatFuelButtonResponse();
     $id = $request->id;
-    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/movies/' . $id . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
     $resp_obj = json_decode($res->body);
     $vote_average = $resp_obj->vote_average;
     $title_film = $resp_obj->original_title;

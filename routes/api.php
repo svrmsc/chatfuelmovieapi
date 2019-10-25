@@ -137,6 +137,7 @@ Route::get('/actors/search', function(Request $request) {
     $actors = $resp_obj->results;
 
     $response = new ChatFuelQuickReplyResponse();
+    $response->messages[0]->attachment->payload->setText("Quale di questi?");
     $i = 0;
     foreach ($actors as $actor) {
         $i++;
@@ -189,6 +190,7 @@ Route::get('/movies/search', function(Request $request) {
     $movies = $resp_obj->results;
 
     $response = new ChatFuelButtonResponse();
+    $response->messages[0]->attachment->payload->setText("Quale di questi?");
     $i = 0;
     foreach ($movies as $movie) {
         $i++;

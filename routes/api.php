@@ -110,16 +110,6 @@ class ChatFuelQuickReplyResponse {
     }
 }
 
-Route::get('/provaqr', function () {
-    $response = new ChatFuelQuickReplyResponse();
-    $button = new ChatFuelButton();
-    $button->title = "prova";
-    $response->messages[0]->addButton($button);
-    $response = json_encode($response);
-    $response = str_replace("\/", "/", $response);
-    return $response;
-});
-
 Route::get('/actors/search', function(Request $request) {
     $query = null;
     if ($request->has('q')) {
@@ -695,5 +685,11 @@ Route::get('/movies/{id}/videos', function(Request $request){
     return $response;
 });
 
+
+Route::get('admin/refresh', function(Request $request) {
+
+    $xml = Requests::get('https://rest.tamburino.it/api/v1/movietheaters/programming/159');
+
+});
 
 

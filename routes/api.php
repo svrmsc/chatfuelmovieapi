@@ -407,7 +407,7 @@ Route::get('discover/{id}', function(Request $request){
         $id = $movie->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
         $response->messages[0]->addButton($button);
-        if ($i ==9) break;
+        if ($i ==10) break;
     }
 
     $block = new ChatFuelBlock();

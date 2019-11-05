@@ -26,6 +26,12 @@ class ChatFuelButton  {
     public $type = "json_plugin_url";
 }
 
+class ChatFuelBlock  {
+    public $title;
+    public $block_names=array();
+    public $type = "show_block";
+}
+
 class ChatFuelPayload  {
     public $template_type = "button";
     public $text = "hello!";
@@ -94,12 +100,16 @@ class ChatFuelTextResponse {
 class ChatFuelQuickReplies {
     public $quick_replies = array();
 
+    public function setText($text) {
+        $this->text = $text;
+    }
+
     public function addButton(ChatFuelButton $button) {
         $this->quick_replies[] = $button;
     }
 
-    public function setText($text) {
-        $this->text = $text;
+    public function addBlock(ChatFuelBlock $block){
+        $this->quick_replies[] = $block;
     }
 }
 
@@ -285,7 +295,7 @@ Route::get('discover/genre', function(Request $request){
 
     $headers = array('Accept' => 'application/json');
     $response = new ChatFuelQuickReplyResponse();
-    $response->messages[0]->setText("Che genere di film vuoi vedere? Scegli tra i seguenti...");
+    $response->messages[0]->setText("A che genere di film sei interessato in questo momento?");
 
 
         $button = new ChatFuelButton();
@@ -397,8 +407,14 @@ Route::get('discover/{id}', function(Request $request){
         $id = $movie->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
         $response->messages[0]->addButton($button);
-        if ($i ==11) break;
+        if ($i ==10) break;
     }
+
+    $block = new ChatFuelBlock();
+    $block->title = "Nessuno di questi!";
+    $block->block_names[] = "Select";
+    $response->messages[0]->addBlock($block);
+
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);
@@ -442,6 +458,8 @@ Route::get('actor/{id}/movies', function(Request $request){
         $response->messages[0]->addButton($button);
         if ($i ==11) break;
     }
+
+
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);

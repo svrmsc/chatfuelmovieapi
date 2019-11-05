@@ -412,7 +412,7 @@ Route::get('discover/{id}', function(Request $request){
 
     $block = new ChatFuelBlock();
     $block->title = "Nessuno di questi!";
-    $block->block_names[] = "Select";
+    $block->block_names[0] = "Select";
     $response->messages[0]->addBlock($block);
 
 

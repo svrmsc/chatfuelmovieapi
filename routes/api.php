@@ -682,7 +682,7 @@ Route::get('/movies/{id}/actors', function(Request $request){
         $response->messages[$i+1] = $cast[$i]->name . " è " . $cast[$i]->character;
     }
 
-    $response->messages[5]->setText("Ti interessa questo film?");
+    $response->messages[5] = "Ti interessa questo film?" ;
 
     $button = new ChatFuelButton();
     $button->title = "Si";

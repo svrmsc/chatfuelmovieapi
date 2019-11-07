@@ -670,34 +670,35 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $resp_obj = json_decode($res->body);
 
     $cast = $resp_obj->cast;
-    $i=0;
+
 
 
     $response = new ChatFuelQuickReplyResponse();
 
-    $response->messages[0]->setText('Gli attori principali sono:');
+    $response->messages[0] = new ChatFuelText('Gli attori principali sono:');
 
-
+    $i=1;
     for($i;$i<4;$i++){
-        $response->messages[$i+1] = $cast[$i]->name . " è " . $cast[$i]->character;
+        $response->messages[$i] = new ChatFuelText($cast[$i]->name . " è " . $cast[$i]->character);
     }
-
-    $response->messages[5] = "Ti interessa questo film?" ;
+    $i += 1;
+    $response->messages[$i] = new ChatFuelQuickReplies();
+    $response->messages[$i]->setText("Ti interessa questo film?");
 
     $button = new ChatFuelButton();
     $button->title = "Si";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=si" . "&tipo=actor";
-    $response->messages[5]->addButton($button);
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=si" . "&tipo=director";
+    $response->messages[$i]->addButton($button);
 
     $button = new ChatFuelButton();
     $button->title = "NO!";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=no" . "&tipo=actor";
-    $response->messages[5]->addButton($button);
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=no" . "&tipo=director";
+    $response->messages[$i]->addButton($button);
 
     $button = new ChatFuelButton();
     $button->title = "Dammi più informazioni";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
-    $response->messages[5]->addButton($button);
+    $response->messages[$i]->addButton($button);
 
 
 
@@ -741,23 +742,9 @@ Route::get('/movies/{id}/directors', function(Request $request){
             $i++;
         }
     }
-    $response->messages[$i] = new ChatFuelQuickReplies();
-    $response->messages[$i]->setText("Ti interessa questo film?");
 
-    $button = new ChatFuelButton();
-    $button->title = "Si";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=si" . "&tipo=director";
-    $response->messages[$i]->addButton($button);
 
-    $button = new ChatFuelButton();
-    $button->title = "NO!";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=no" . "&tipo=director";
-    $response->messages[$i]->addButton($button);
 
-    $button = new ChatFuelButton();
-    $button->title = "Dammi più informazioni";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
-    $response->messages[$i]->addButton($button);
 
 
 

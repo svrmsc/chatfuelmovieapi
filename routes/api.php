@@ -737,7 +737,7 @@ Route::get('/movies/{id}/director', function(Request $request){
 
     foreach($crew as $director){
         if($director->job == 'Director'){
-            $response->messages[$i]=$director->name;
+            $response->messages[$i]= new ChatFuelText($director->name);
             $i++;
         }
     }

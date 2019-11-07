@@ -12,4 +12,5 @@ class Fbuser extends Model
     {
         return $this->hasMany('App\Activity');
     }
+
 }

@@ -676,7 +676,7 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $response = new ChatFuelQuickReplyResponse();
 
     $response->messages[0] = new ChatFuelText('Gli attori principali sono:');
-
+    /*
     $i=1;
     for($i;$i<4;$i++){
         $response->messages[$i] = new ChatFuelText($cast[$i]->name . " è " . $cast[$i]->character);
@@ -701,7 +701,7 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $response->messages[$i]->addButton($button);
 
 
-
+    */
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);

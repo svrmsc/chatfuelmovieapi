@@ -162,8 +162,13 @@ Route::get('/actors/search', function(Request $request) {
         $id = $actor->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/actor/" . $id . "/movies?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&gender=" . $gender;
         $response->messages[0]->addButton($button);
-        if ($i ==11) break;
+        if ($i ==10) break;
     }
+
+    $block = new ChatFuelBlock();
+    $block->title = "Nessuno di questi!";
+    $block->block_names[0] = "Select";
+    $response->messages[0]->addBlock($block);
 
     if($i==0){
         $messages = array();
@@ -219,8 +224,13 @@ Route::get('/directors/search', function(Request $request) {
         $id = $actor->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/director/" . $id . "/movies?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&gender=" . $gender;
         $response->messages[0]->addButton($button);
-        if ($i ==11) break;
+        if ($i ==10) break;
     }
+
+    $block = new ChatFuelBlock();
+    $block->title = "Nessuno di questi!";
+    $block->block_names[0] = "Select";
+    $response->messages[0]->addBlock($block);
 
     if($i==0){
         $messages = array();
@@ -266,8 +276,8 @@ Route::get('/movies/search', function(Request $request) {
     $resp_obj = json_decode($res->body);
     $movies = $resp_obj->results;
 
-    $response = new ChatFuelButtonResponse();
-    $response->messages[0]->attachment->payload->setText("Quale di questi?");
+    $response = new ChatFuelQuickReplyResponse();
+    $response->messages[0]->setText("Quale di questi?");
     $i = 0;
     foreach ($movies as $movie) {
         $i++;
@@ -275,9 +285,14 @@ Route::get('/movies/search', function(Request $request) {
         $button->title = $movie->title ;
         $id = $movie->id;
         $button->url = "https://chatfuelmovieapi.herokuapp.com/api/movies/" . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&gender=" . $gender;
-        $response->messages[0]->attachment->payload->addButton($button);
-        if ($i == 3) break;
+        $response->messages[0]->addButton($button);
+        if ($i == 10) break;
     }
+
+    $block = new ChatFuelBlock();
+    $block->title = "Nessuno di questi!";
+    $block->block_names[0] = "Select";
+    $response->messages[0]->addBlock($block);
 
     if($i==0){
         $messages = array();

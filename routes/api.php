@@ -741,7 +741,7 @@ Route::get('/movies/{id}/directors', function(Request $request){
             $i++;
         }
     }
-
+    $response->messages[$i] = new ChatFuelQuickReplies();
     $response->messages[$i]->setText("Ti interessa questo film?");
 
     $button = new ChatFuelButton();

@@ -709,7 +709,7 @@ Route::get('/movies/{id}/actors', function(Request $request){
 
 });
 
-Route::get('/movies/{id}/director', function(Request $request){
+Route::get('/movies/{id}/directors', function(Request $request){
     if ($request->has('s')) {
         $mood = $request->s;
     }

@@ -15,13 +15,14 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('fbuser_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('name');
+            $table->string('gender');
             $table->string('mood');
-            $table->unsignedBigInteger('activity_type_id');
+            $table->string('movie_id');
+            $table->string('movie_title');
+            $table->boolean('liked');
             $table->timestamps();
-
-            $table->foreign('fbuser_id')->references('id')->on('fbusers');
-            $table->foreign('activity_type_id')->references('id')->on('activity_types');
         });
     }
 

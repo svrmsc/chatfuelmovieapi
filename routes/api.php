@@ -743,12 +743,23 @@ Route::get('/movies/{id}/directors', function(Request $request){
         }
     }
 
+    $response->messages[$i] = new ChatFuelQuickReplies();
+    $response->messages[$i]->setText("Ti interessa questo film?");
 
+    $button = new ChatFuelButton();
+    $button->title = "Si";
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=si" . "&tipo=director";
+    $response->messages[$i]->addButton($button);
 
+    $button = new ChatFuelButton();
+    $button->title = "NO!";
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/save?s=' . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&idf=" . $id . "&risposta=no" . "&tipo=director";
+    $response->messages[$i]->addButton($button);
 
-
-
-
+    $button = new ChatFuelButton();
+    $button->title = "Dammi più informazioni";
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+    $response->messages[$i]->addButton($button);
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);

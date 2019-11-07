@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use App\Activity;
+
 //use Jenssegers\Model\Model;
 
 /*
@@ -671,12 +673,24 @@ Route::get('/save', function(Request $request){
     }
 
     if($request->has('idf')){
-        $risposta = $request->idf;
+        $idf = $request->idf;
     }
 
     if ($request->has('gender')) {
         $gender = $request->gender;
     }
+
+    $activity = new Activity();
+    $activity->user_id = $id_utente;
+    $activity->name = $user_name;
+    $activity->gender = $gender;
+    $activity->mood = $mood;
+    $activity->movie_id = $idf;
+    if ($risposta == "si")
+        $activity->liked = true;
+    else
+        $activity->liked = false;
+    $activity->save();
 
 
 

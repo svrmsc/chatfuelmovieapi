@@ -20,7 +20,6 @@ class CreateActivitiesTable extends Migration
             $table->string('gender');
             $table->string('mood');
             $table->string('movie_id');
-            $table->string('movie_title');
             $table->boolean('liked');
             $table->timestamps();
         });

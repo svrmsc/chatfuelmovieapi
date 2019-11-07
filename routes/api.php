@@ -171,10 +171,9 @@ Route::get('/actors/search', function(Request $request) {
     $response->messages[0]->addBlock($block);
 
     if($i==0){
-        $messages = array();
-        $message='Scusami non ho trovato risultati...';
-        $messages[] = $message;
-        $response = new ChatFuelTextResponse($messages);
+        return '{
+            "redirect_to_blocks": ["Null"]
+          }';
     }
 
 
@@ -233,10 +232,9 @@ Route::get('/directors/search', function(Request $request) {
     $response->messages[0]->addBlock($block);
 
     if($i==0){
-        $messages = array();
-        $message='Scusami non ho trovato risultati...';
-        $messages[] = $message;
-        $response = new ChatFuelTextResponse($messages);
+        return '{
+            "redirect_to_blocks": ["Null"]
+          }';
     }
 
 
@@ -295,10 +293,9 @@ Route::get('/movies/search', function(Request $request) {
     $response->messages[0]->addBlock($block);
 
     if($i==0){
-        $messages = array();
-        $message='Scusami non ho trovato risultati...';
-        $messages[] = $message;
-        $response = new ChatFuelTextResponse($messages);
+        return '{
+            "redirect_to_blocks": ["Null"]
+          }';
     }
 
 

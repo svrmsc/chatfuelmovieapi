@@ -681,8 +681,7 @@ Route::get('/movies/{id}/actors', function(Request $request){
     for($i;$i<4;$i++){
         $response->messages[$i] = new ChatFuelText($cast[$i]->name . " è " . $cast[$i]->character);
     }
-    /*
-    $i += 1;
+
     $response->messages[$i] = new ChatFuelQuickReplies();
     $response->messages[$i]->setText("Ti interessa questo film?");
 
@@ -700,9 +699,6 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $button->title = "Dammi più informazioni";
     $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
     $response->messages[$i]->addButton($button);
-
-
-    */
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);

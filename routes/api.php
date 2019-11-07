@@ -754,8 +754,17 @@ Route::get('/movies/{id}/actors', function(Request $request){
     $response->messages[0] = new ChatFuelText('Gli attori principali sono:');
 
     $i=1;
-    for($i;$i<4;$i++){
-        $response->messages[$i] = new ChatFuelText($cast[$i]->name . " è " . $cast[$i]->character);
+    foreach($cast as $cast1){
+        $response->messages[$i] = new ChatFuelText($cast1->name . " è " . $cast1->character);
+        $i++;
+        if ($i == 6) break;
+
+    }
+
+    if($i==1){
+        return '{
+            "redirect_to_blocks": ["InfoMancante"]
+          }';
     }
 
     $response->messages[$i] = new ChatFuelQuickReplies();
@@ -821,6 +830,12 @@ Route::get('/movies/{id}/directors', function(Request $request){
         }
     }
 
+    if($i==0){
+        return '{
+            "redirect_to_blocks": ["InfoMancante"]
+          }';
+    }
+
     $response->messages[$i] = new ChatFuelQuickReplies();
     $response->messages[$i]->setText("Ti interessa questo film?");
 
@@ -874,6 +889,12 @@ Route::get('/movies/{id}/videos', function(Request $request){
     $resp_obj = json_decode($res->body);
 
     $key_video = $resp_obj->results[0]->key;
+
+    if($key_video==null){
+        return '{
+            "redirect_to_blocks": ["InfoMancante"]
+          }';
+    }
 
     $message = 'Ecco il trailer: '.'https://www.youtube.com/watch?v='.$key_video;
 

@@ -709,7 +709,7 @@ Route::get('/save', function(Request $request){
     $user_name = str_replace(" ", "+", $user_name);
 
     return '{
-        "redirect_to_blocks": ["Select"]
+        "redirect_to_blocks": ["Save"]
       }';
 
 

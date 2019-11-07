@@ -804,7 +804,7 @@ Route::get('/movies/{id}/directors', function(Request $request){
 
     $button = new ChatFuelButton();
     $button->title = "Dammi più informazioni";
-    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name;
+    $button->url = 'https://chatfuelmovieapi.herokuapp.com/api/movies/' . $id . "/select?s=" . $mood . "&idu=" . $id_utente . "&uname=" . $user_name . "&gender=" . $gender;
     $response->messages[$i]->addButton($button);
 
     $response = json_encode($response);

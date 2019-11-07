@@ -742,7 +742,7 @@ Route::get('/movies/{id}/directors', function(Request $request){
         }
     }
 
-    $response->messages[i]->setText("Ti interessa questo film?");
+    $response->messages[$i]->setText("Ti interessa questo film?");
 
     $button = new ChatFuelButton();
     $button->title = "Si";

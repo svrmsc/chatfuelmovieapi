@@ -661,6 +661,12 @@ Route::get('/movies/{id}/plot', function(Request $request) {
     $response->messages[$i]->addButton($button);
 
 
+    if($plot==null){
+        return '{
+            "redirect_to_blocks": ["InfoMancante"]
+          }';
+    }
+
 
     $response = json_encode($response);
     $response = str_replace("\/", "/", $response);

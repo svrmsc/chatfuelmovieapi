@@ -888,7 +888,7 @@ Route::get('/movies/{id}/videos', function(Request $request){
 
     $resp_obj = json_decode($res->body);
 
-    $key_video = $resp_obj->results[0]->key;
+    $key_video = $resp_obj->results->key;
 
     if($key_video==null){
         return '{

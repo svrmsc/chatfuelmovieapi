@@ -888,7 +888,17 @@ Route::get('/movies/{id}/videos', function(Request $request){
 
     $resp_obj = json_decode($res->body);
 
-    $key_video = $resp_obj->results->key;
+    $i=0;
+    foreach($resp_obj->results as $res){
+        $i++;
+    }
+    if(i==0){
+        return '{
+            "redirect_to_blocks": ["InfoMancante"]
+          }';
+    }
+
+    $key_video = $resp_obj->results[0]->key;
 
     if($key_video==null){
         return '{

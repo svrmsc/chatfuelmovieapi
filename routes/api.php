@@ -892,7 +892,7 @@ Route::get('/movies/{id}/videos', function(Request $request){
     foreach($resp_obj->results as $res){
         $i++;
     }
-    if(i==0){
+    if($i==0){
         return '{
             "redirect_to_blocks": ["InfoMancante"]
           }';

@@ -884,7 +884,7 @@ Route::get('/movies/{id}/videos', function(Request $request){
     $headers = array('Accept' => 'application/json');
     $id = $request->id;
 
-    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/videos' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=en-US', $headers);
+    $res = Requests::get('https://api.themoviedb.org/3/movie/' . $id . '/videos' . '?api_key=8a63e1f0e24bbd552535468ca3a3f323&language=it', $headers);
 
     $resp_obj = json_decode($res->body);
 
